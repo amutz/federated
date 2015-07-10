@@ -13,9 +13,9 @@ defmodule Federated.Router do
   end
 
   scope "/", Federated do
-    pipe_through :browser # Use the default browser stack
-
-    get "/", PageController, :index
+    pipe_through :api
+    
+    resources "/communities", CommunityController
   end
 
   # Other scopes may use custom stacks.
