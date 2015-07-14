@@ -1,6 +1,6 @@
 defmodule Federated.Router do
   use Federated.Web, :router
-
+  
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -9,13 +9,13 @@ defmodule Federated.Router do
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug :accepts, ["json-api"]
   end
 
   scope "/", Federated do
     pipe_through :api
     
-    resources "/communities", CommunityController
+    resources "/communities", CommunityController, param: "name"
   end
 
   # Other scopes may use custom stacks.

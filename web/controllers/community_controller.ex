@@ -7,7 +7,7 @@ defmodule Federated.CommunityController do
 
   def index(conn, _params) do
     communities = Repo.all(Community)
-    render(conn, "index.json", communities: communities)
+    render conn, "index.json", %{data: communities, params: _params}
   end
 
   def create(conn, %{"community" => community_params}) do
@@ -15,7 +15,7 @@ defmodule Federated.CommunityController do
 
     if changeset.valid? do
       community = Repo.insert!(changeset)
-      render(conn, "show.json", community: community)
+      render conn, "show.json", %{data: community}
     else
       conn
       |> put_status(:unprocessable_entity)
@@ -23,18 +23,18 @@ defmodule Federated.CommunityController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    community = Repo.get!(Community, id)
-    render conn, "show.json", community: community
+  def show(conn, %{"name" => name}) do
+    community = Repo.get_by!(Community, name: name)
+    render conn, "show.json", %{data: community}
   end
 
-  def update(conn, %{"id" => id, "community" => community_params}) do
-    community = Repo.get!(Community, id)
+  def update(conn, %{"name" => name, "community" => community_params}) do
+    community = Repo.get_by!(Community, name: name)
     changeset = Community.changeset(community, community_params)
 
     if changeset.valid? do
       community = Repo.update!(changeset)
-      render(conn, "show.json", community: community)
+      render conn, "show.json", %{data: community}
     else
       conn
       |> put_status(:unprocessable_entity)
@@ -42,10 +42,11 @@ defmodule Federated.CommunityController do
     end
   end
 
-  def delete(conn, %{"id" => id}) do
-    community = Repo.get!(Community, id)
+  def delete(conn, %{"name" => name}) do
+    community = Repo.get_by!(Community, name: name)
 
     community = Repo.delete!(community)
-    render(conn, "show.json", community: community)
+    render conn, "show.json", %{data: community}
   end
 end
+

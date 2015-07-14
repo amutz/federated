@@ -1,15 +1,18 @@
 defmodule Federated.CommunityView do
   use Federated.Web, :view
+  use JSONAPI.PhoenixView
 
-  def render("index.json", %{communities: communities}) do
-    %{data: render_many(communities, "community.json")}
+  def type, do: "community"
+
+  def attributes(model) do
+    Map.take(model, [:id, :name])
   end
 
-  def render("show.json", %{community: community}) do
-    %{data: render_one(community, "community.json")}
+  def relationships() do
+    %{}
   end
 
-  def render("community.json", %{community: community}) do
-    %{id: community.id}
+  def url_func() do
+    &community_url/3
   end
 end
