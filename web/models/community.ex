@@ -3,7 +3,7 @@ defmodule Federated.Community do
 
   schema "communities" do
     field :name, :string
-
+    has_many :submissions, Federated.Submission
     timestamps
   end
 

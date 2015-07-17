@@ -16,6 +16,7 @@ defmodule Federated.Router do
     pipe_through :api
     
     resources "/communities", CommunityController, param: "name"
+    resources "/submissions", SubmissionController
   end
 
   # Other scopes may use custom stacks.

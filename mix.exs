@@ -35,6 +35,7 @@ defmodule Federated.Mixfile do
      {:phoenix_html, "~> 1.1"},
      {:phoenix_live_reload, "~> 0.4", only: :dev},
      {:cowboy, "~> 1.0"},
-     {:jsonapi, "~>0.0.2"}]
+     {:jsonapi, git: "https://github.com/alexjp/jsonapi.git", ref: "74e3c0c2d3fe19407456710f2efa1fff00a925f2"}]
+#     {:jsonapi, "~>0.0.2"}]
   end
 end

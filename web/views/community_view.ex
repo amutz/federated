@@ -9,7 +9,7 @@ defmodule Federated.CommunityView do
   end
 
   def relationships() do
-    %{}
+    %{submissions: %{view: Federated.SubmissionView}}
   end
 
   def url_func() do

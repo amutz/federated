@@ -6,7 +6,7 @@ defmodule Federated.CommunityController do
   plug :scrub_params, "community" when action in [:create, :update]
 
   def index(conn, _params) do
-    communities = Repo.all(Community)
+    communities = Repo.all(Community) |> Repo.preload(:submissions)
     render conn, "index.json", %{data: communities, params: _params}
   end
 
@@ -24,7 +24,8 @@ defmodule Federated.CommunityController do
   end
 
   def show(conn, %{"name" => name}) do
-    community = Repo.get_by!(Community, name: name)
+    community = Repo.get_by!(Community, name: name) |> Repo.preload(:submissions)
+
     render conn, "show.json", %{data: community}
   end
 
