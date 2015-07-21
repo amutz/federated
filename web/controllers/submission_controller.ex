@@ -13,6 +13,7 @@ defmodule Federated.SubmissionController do
 
     if changeset.valid? do
       submission = Repo.insert!(changeset)
+      notify_created(submission)
       render conn, "show.json", %{data: submission}
     else
       conn
@@ -26,12 +27,14 @@ defmodule Federated.SubmissionController do
     render conn, "show.json", %{data: submission}
   end
 
-  def update(conn, %{"id" => id, "submission" => submission_params}) do
+  def update(conn, %{"data" => submission_params}) do
+    id = submission_params["id"]
     submission = Repo.get!(Submission, id)
-    changeset = Submission.changeset(submission, submission_params)
+    changeset = Submission.changeset(%Submission{id: elem(Integer.parse(id), 0)}, submission_params["attributes"], submission_params["relationships"])
 
     if changeset.valid? do
       submission = Repo.update!(changeset)
+      notify_modified(submission)
       render conn, "show.json", %{data: submission}
     else
       conn
@@ -45,5 +48,16 @@ defmodule Federated.SubmissionController do
 
     submission = Repo.delete!(submission)
     render conn, "show.json", %{data: submission}
+  end
+
+  def notify_modified(submission) do
+    payload = Federated.SubmissionView |> JSONAPI.show(submission, nil, nil)
+    Federated.Endpoint.broadcast! "submissions:#{submission.id}", "update", payload 
+  end
+  def notify_created(submission) do
+    community = Repo.get_by!(Federated.Community, id: submission.community_id) |> Repo.preload(:submissions)
+
+    payload = Federated.CommunityView |> JSONAPI.show(community, nil, nil)
+    Federated.Endpoint.broadcast! "communities:#{community.id}", "update", payload 
   end
 end

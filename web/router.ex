@@ -18,7 +18,10 @@ defmodule Federated.Router do
     resources "/communities", CommunityController, param: "name"
     resources "/submissions", SubmissionController
   end
-
+  socket "/websocket", Federated do
+    channel "submissions:*", SubmissionChannel
+    channel "communities:*", CommunityChannel
+  end
   # Other scopes may use custom stacks.
   # scope "/api", Federated do
   #   pipe_through :api
