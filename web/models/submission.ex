@@ -4,12 +4,13 @@ defmodule Federated.Submission do
   schema "submissions" do
     field :title, :string
     field :link, :string
+    field :score, :integer
 
     belongs_to :community, Federated.Community
     timestamps
   end
 
-  @required_fields ~w(title link community_id)
+  @required_fields ~w(title link community_id score)
   @optional_fields ~w()
 
   @doc """

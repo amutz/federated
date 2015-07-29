@@ -6,7 +6,7 @@ defmodule Federated.SubmissionView do
   def type, do: "submission"
 
   def attributes(model) do
-    Map.take(model, [:id, :title, :link, :created_at])
+    Map.take(model, [:id, :score, :title, :link, :created_at])
   end
 
   def relationships() do
