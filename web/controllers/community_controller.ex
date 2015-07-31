@@ -24,8 +24,12 @@ defmodule Federated.CommunityController do
   end
 
   def show(conn, %{"name" => name}) do
-    community = Repo.get_by!(Community, name: name) |> Repo.preload(:submissions)
-
+    community = Repo.get_by(Community, name: name)  
+    unless community do
+      community = Repo.insert(%Community{name: name})
+    end
+    community = community |> Repo.preload(:submissions)
+ 
     render conn, "show.json", %{data: community}
   end
 
